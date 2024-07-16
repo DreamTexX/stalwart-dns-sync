@@ -142,7 +142,7 @@ async function getServerInfo(zone: Zone): Promise<Array<ServerRecord>> {
         }
     };
 
-    let response = await fetch(`${STALWART_INSTANCE_URL}/api/domain/`, init);
+    let response = await fetch(`${STALWART_INSTANCE_URL}/api/domain`, init);
     const domains = (await response.json()).data.items;
     const records: Array<ServerRecord> = [];
     for (const domain of domains) {
