@@ -1,4 +1,4 @@
-import { CLOUDFLARE_ZONE_IDS, STALWART_ACCESS_TOKEN } from "$env/static/private";
+import { CLOUDFLARE_ZONE_IDS, STALWART_ACCESS_TOKEN, STALWART_INSTANCE_URL } from "$env/static/private";
 import type { Record as DNSRecord } from "cloudflare/resources/dns/records.mjs";
 import type { Zone } from "cloudflare/resources/zones/zones.mjs";
 import { CLOUDFLARE } from "$lib/server/cloudflare";
@@ -142,13 +142,12 @@ async function getServerInfo(zone: Zone): Promise<Array<ServerRecord>> {
         }
     };
 
-    let response = await fetch("https://mail.isua.one/api/domain", init);
+    let response = await fetch(`${STALWART_INSTANCE_URL}/api/domain/`, init);
     const domains = (await response.json()).data.items;
-
     const records: Array<ServerRecord> = [];
     for (const domain of domains) {
         if (!domain.endsWith(zone.name)) continue;
-        const response = await fetch(`https://mail.isua.one/api/domain/${domain}`, init);
+        const response = await fetch(`${STALWART_INSTANCE_URL}/api/domain/${domain}`, init);
         records.push(...(await response.json()).data);
     }
     return records.map((record) => ({
@@ -162,7 +161,6 @@ async function analyze(): Promise<Array<{ zone: Zone; result: AnalysisResult }>>
     return Promise.all(
         CLOUDFLARE_ZONE_IDS.split(",").map(async (zoneId) => {
             const zone = await getZone(zoneId);
-            console.log(zone);
             const dnsRecords = await getDNSInfo(zone);
             const serverRecords = await getServerInfo(zone);
 
