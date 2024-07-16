@@ -1,0 +1,30 @@
+{
+	"name": "Node.js & TypeScript",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+	"mounts": [
+		{
+			"source": "${devcontainerId}-node-modules",
+			"target": "${containerWorkspaceFolder}/node_modules",
+			"type": "volume"
+		},
+		{
+			"source": "${devcontainerId}-svelte-kit",
+			"target": "${containerWorkspaceFolder}/.svelte-kit",
+			"type": "volume"
+		}
+	],
+	"forwardPorts": [5173],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"streetsidesoftware.code-spell-checker",
+				"streetsidesoftware.code-spell-checker-german",
+				"svelte.svelte-vscode",
+				"bradlc.vscode-tailwindcss",
+				"csstools.postcss",
+				"esbenp.prettier-vscode"
+			]
+		}
+	},
+	"remoteUser": "root"
+}
